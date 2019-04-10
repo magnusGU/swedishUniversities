@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#"
+     xml:base="http://www.semanticweb.org/magnus/ontologies/2019/3/universities"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#alumnusOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#alumnusOf">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Person"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#University"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#bornIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#bornIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Person"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Place"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#employeeOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#employeeOf">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Person"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Organisation"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#locatedIn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#locatedIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Organisation"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Place"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#countryName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#countryName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Place"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#organisationName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#organisationName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Organisation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#personName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#personName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Person"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#placeName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#placeName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Place"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#yearFounded -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#yearFounded">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#University"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Organisation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Organisation"/>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Person -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Person"/>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Place -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Place"/>
+    
+
+
+    <!-- http://www.semanticweb.org/magnus/ontologies/2019/3/universities#University -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#University">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/magnus/ontologies/2019/3/universities#Organisation"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
