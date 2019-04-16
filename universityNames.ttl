@@ -1,0 +1,89 @@
+@prefix uni:<http://www.semanticweb.org/magnus/ontologies/2019/3/universities#> .
+uni:Lund_University a uni:University;
+ uni:organisationName "Lund University";
+ uni:yearFounded "1666"; uni:locatedIn uni:Lund. 
+uni:Lund a uni:Place; uni:placeName "Lund"; uni:countryName "Sweden".
+uni:Karolinska_Institute a uni:University;
+ uni:organisationName "Karolinska Institute";
+ uni:yearFounded "1810"; uni:locatedIn uni:Solna. 
+uni:Solna a uni:Place; uni:placeName "Solna"; uni:countryName "Sweden".
+uni:Stockholm_University a uni:University;
+ uni:organisationName "Stockholm University";
+ uni:yearFounded "1878"; uni:locatedIn uni:Stockholm. 
+uni:Stockholm a uni:Place; uni:placeName "Stockholm"; uni:countryName "Sweden".
+uni:University_of_Gothenburg a uni:University;
+ uni:organisationName "University of Gothenburg";
+ uni:yearFounded "1954"; uni:locatedIn uni:Gothenburg. 
+uni:Gothenburg a uni:Place; uni:placeName "Gothenburg"; uni:countryName "Sweden".
+uni:Swedish_University_of_Agricultural_Sciences a uni:University;
+ uni:organisationName "Swedish University of Agricultural Sciences";
+ uni:yearFounded "1977"; uni:locatedIn uni:Uppsala. 
+uni:Uppsala a uni:Place; uni:placeName "Uppsala"; uni:countryName "Sweden".
+uni:Växjö_University a uni:University;
+ uni:organisationName "Växjö University";
+ uni:yearFounded "1977"; uni:locatedIn uni:Växjö. 
+uni:Växjö a uni:Place; uni:placeName "Växjö"; uni:countryName "Sweden".
+uni:Linköping_University a uni:University;
+ uni:organisationName "Linköping University";
+ uni:yearFounded "1975"; uni:locatedIn uni:Linköping. 
+uni:Linköping a uni:Place; uni:placeName "Linköping"; uni:countryName "Sweden".
+uni:Chalmers_University_of_Technology a uni:University;
+ uni:organisationName "Chalmers University of Technology";
+ uni:yearFounded "1829"; uni:locatedIn uni:Gothenburg. 
+uni:Gothenburg a uni:Place; uni:placeName "Gothenburg"; uni:countryName "Sweden".
+uni:Royal_Institute_of_Technology a uni:University;
+ uni:organisationName "Royal Institute of Technology";
+ uni:yearFounded "1827"; uni:locatedIn uni:Stockholm. 
+uni:Stockholm a uni:Place; uni:placeName "Stockholm"; uni:countryName "Sweden".
+uni:Umeå_University a uni:University;
+ uni:organisationName "Umeå University";
+ uni:yearFounded "1965"; uni:locatedIn uni:Umeå. 
+uni:Umeå a uni:Place; uni:placeName "Umeå"; uni:countryName "Sweden".
+uni:University_of_Borås a uni:University;
+ uni:organisationName "University of Borås";
+ uni:yearFounded "1977"; uni:locatedIn uni:Borås. 
+uni:Borås a uni:Place; uni:placeName "Borås"; uni:countryName "Sweden".
+uni:Linnaeus_University a uni:University;
+ uni:organisationName "Linnaeus University";
+ uni:yearFounded "2010"; uni:locatedIn uni:Växjö. 
+uni:Växjö a uni:Place; uni:placeName "Växjö"; uni:countryName "Sweden".
+uni:Linnaeus_University a uni:University;
+ uni:organisationName "Linnaeus University";
+ uni:yearFounded "2010"; uni:locatedIn uni:Kalmar. 
+uni:Kalmar a uni:Place; uni:placeName "Kalmar"; uni:countryName "Sweden".
+uni:Karlstad_University a uni:University;
+ uni:organisationName "Karlstad University";
+ uni:yearFounded "1977"; uni:locatedIn uni:Karlstad. 
+uni:Karlstad a uni:Place; uni:placeName "Karlstad"; uni:countryName "Sweden".
+uni:Mid_Sweden_University a uni:University;
+ uni:organisationName "Mid Sweden University";
+ uni:yearFounded "1993"; uni:locatedIn uni:Östersund. 
+uni:Östersund a uni:Place; uni:placeName "Östersund"; uni:countryName "Sweden".
+uni:Luleå_University_of_Technology a uni:University;
+ uni:organisationName "Luleå University of Technology";
+ uni:yearFounded "1971"; uni:locatedIn uni:Luleå. 
+uni:Luleå a uni:Place; uni:placeName "Luleå"; uni:countryName "Sweden".
+uni:Norrlands_University_Hospital a uni:University;
+ uni:organisationName "Norrland's University Hospital";
+ uni:yearFounded "1907"; uni:locatedIn uni:Umeå. 
+uni:Umeå a uni:Place; uni:placeName "Umeå"; uni:countryName "Sweden".
+uni:Örebro_University a uni:University;
+ uni:organisationName "Örebro University";
+ uni:yearFounded "1977"; uni:locatedIn uni:Örebro. 
+uni:Örebro a uni:Place; uni:placeName "Örebro"; uni:countryName "Sweden".
+uni:Red_Cross_University_College_of_Nursing a uni:University;
+ uni:organisationName "Red Cross University College of Nursing";
+ uni:yearFounded "1867"; uni:locatedIn uni:Stockholm. 
+uni:Stockholm a uni:Place; uni:placeName "Stockholm"; uni:countryName "Sweden".
+uni:Sophiahemmet_University_College a uni:University;
+ uni:organisationName "Sophiahemmet University College";
+ uni:yearFounded "1884"; uni:locatedIn uni:Stockholm. 
+uni:Stockholm a uni:Place; uni:placeName "Stockholm"; uni:countryName "Sweden".
+uni:Centre_for_Information_Logistics a uni:University;
+ uni:organisationName "Centre for Information Logistics";
+ uni:yearFounded "2001"; uni:locatedIn uni:Ljungby. 
+uni:Ljungby a uni:Place; uni:placeName "Ljungby"; uni:countryName "Sweden".
+uni:Högskolan_för_scen_och_musik a uni:University;
+ uni:organisationName "Högskolan för scen och musik";
+ uni:yearFounded "2005"; uni:locatedIn uni:Gothenburg. 
+uni:Gothenburg a uni:Place; uni:placeName "Gothenburg"; uni:countryName "Sweden".
