@@ -49,8 +49,9 @@ for result in results["results"]["bindings"]:
     name = result['personLabel']['value']
     birthplace = result['birthLabel']['value']
     country = result['countryLabel']['value'] 
+    nameFormatted = name.replace(" ","_").replace("'","").replace(",","").replace("’","").replace(".","").replace("(","").replace(")","")
     placeFormatted = birthplace.replace(" ","_").replace(".","").replace(",","").replace("(","").replace(")","").replace('\'',"").replace("–","-")
-    file.write("uni:" + name.replace(" ","_").replace("'","").replace(",","").replace("’","").replace(".","").replace("(","").replace(")",""))
+    file.write("uni:" + nameFormatted)
     file.write(" a uni:Person;\n uni:personName \"" + name + "\";\n uni:alumnusOf uni:" + uniname.replace(" ","_").replace("'","") + ";\n uni:bornIn uni:" + placeFormatted + ".\n")
     file.write("uni:" + placeFormatted + " a uni:Place; uni:placeName \"" + birthplace + "\"; uni:countryName \"" + country + "\".\n")
 
@@ -61,5 +62,7 @@ for result in results["results"]["bindings"]:
     empPlaceFormatted = empPlace.replace(" ","_").replace(".","").replace(",","").replace("(","").replace(")","").replace('\'',"").replace("–","-")
     file.write('uni:'+empFormatted+ " a uni:Organisation; uni:organisationName \"" + emp + "\"; uni:locatedIn uni:"+empPlaceFormatted+". \n")
     file.write("uni:"+empPlaceFormatted + " a uni:Place; uni:placeName \""+empPlace+"\"; uni:countryName \"" +empCountry+"\" . \n" )
+
+    file.write('uni:' + nameFormatted + " uni:employeeOf uni:" + empFormatted + ".")
 
 file.close()
