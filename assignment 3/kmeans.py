@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 import time
+import multiprocessing
 
 def generateData(n, c):
     logging.info(f"Generating {n} samples in {c} classes")
@@ -25,7 +26,30 @@ def nearestCentroid(datum, centroids):
     return np.argmin(dist), np.min(dist)
 
 
-def kmeans(k, data, nr_iter = 100):
+def argumentListMaker(N,workers=1):
+    intervalsize = int(N / workers)
+    res = []
+    current = 0
+    while True:
+        res.append(current)
+        current += intervalsize
+        res.append(current)
+        if current + intervalsize > N:
+            res[-1] = N
+            break
+    return res
+
+def assignment(start,fin,k,data,c,centroids):
+    variation = np.zeros(k)
+    cluster_sizes = np.zeros(k, dtype=int)
+    for i in range(start,fin):
+        cluster, dist = nearestCentroid(data[i],centroids)
+        c[i] = cluster
+        cluster_sizes[cluster] += 1
+        variation[cluster] += dist**2
+    return cluster_sizes, variation
+
+def kmeans(k, data, nr_iter = 100, workers = 1):
     N = len(data)
 
     # Choose k random data points as centroids
@@ -33,6 +57,10 @@ def kmeans(k, data, nr_iter = 100):
     logging.debug("Initial centroids\n", centroids)
 
     N = len(data)
+
+    pool = multiprocessing.Pool(workers)
+
+    argumentlist = argumentListMaker(N,workers)
 
     # The cluster index: c[i] = j indicates that i-th datum is in j-th cluster
     c = np.zeros(N, dtype=int)
@@ -44,13 +72,10 @@ def kmeans(k, data, nr_iter = 100):
 
         start = time.time()
         # Assign data points to nearest centroid
-        variation = np.zeros(k)
-        cluster_sizes = np.zeros(k, dtype=int)        
-        for i in range(N):
-            cluster, dist = nearestCentroid(data[i],centroids)
-            c[i] = cluster
-            cluster_sizes[cluster] += 1
-            variation[cluster] += dist**2
+        
+                
+        s = pool.map(assignment,argumentlist)
+        print(s)
         timing[0] += time.time() - start
         delta_variation = -total_variation
         total_variation = sum(variation) 
