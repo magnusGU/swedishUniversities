@@ -43,13 +43,11 @@ def argumentListMaker(N,workers,c,data,centroids):
 def assignment(start,fin,k,c,data,centroids):
     variation = np.zeros(k)
     cluster_sizes = np.zeros(k, dtype=int)
-    print(c)
     for i in range(start,fin):
         cluster, dist = nearestCentroid(data[i],centroids)
         c[i] = cluster
         cluster_sizes[cluster] += 1
         variation[cluster] += dist**2
-    print(c)
     return cluster_sizes, variation
 
 def kmeans(k, data, nr_iter = 100, workers = 1):
@@ -65,13 +63,14 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
 
 
     # The cluster index: c[i] = j indicates that i-th datum is in j-th cluster
-    c = np.zeros(N, dtype=int)
-   # c = RawArray(ctypes.c_ulonglong,N)
+    #c = np.zeros(N, dtype=int)
+    c = RawArray(ctypes.c_ulonglong,N)
+    cc = np.frombuffer(c,dtype=int)    
     timing = [0,0]
     logging.info("Iteration\tVariation\tDelta Variation")
     total_variation = 0.0
 
-    argumentlist = argumentListMaker(N,workers,c,data,centroids)
+    argumentlist = argumentListMaker(N,workers,cc,data,centroids)
     for j in range(nr_iter):
         logging.debug("=== Iteration %d ===" % (j+1))
 
@@ -102,10 +101,6 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
             centroids[c[i]] += data[i]        
         timing[1] += time.time() - start
         centroids = centroids / cluster_sizes.reshape(-1,1)
-        print(cluster_sizes)
-        print(delta_variation)
-        print(total_variation)
-        print(centroids)
         logging.debug(cluster_sizes)
         logging.debug(c)
         logging.debug(centroids)
