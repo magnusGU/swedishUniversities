@@ -26,20 +26,20 @@ def nearestCentroid(datum, centroids):
     return np.argmin(dist), np.min(dist)
 
 
-def argumentListMaker(N,workers=1):
+def argumentListMaker(N,workers,c,data,centroids):
     intervalsize = int(N / workers)
     res = []
     current = 0
     while True:
-        res.append(current)
+        tup = (current,current+intervalsize,len(centroids),c,data,centroids)
         current += intervalsize
-        res.append(current)
+        res.append(tup)
         if current + intervalsize > N:
-            res[-1] = N
+            res[-1] = (res[-1][0],N,len(centroids),c,data,centroids)
             break
     return res
 
-def assignment(start,fin,k,data,c,centroids):
+def assignment(start,fin,k,c,data,centroids):
     variation = np.zeros(k)
     cluster_sizes = np.zeros(k, dtype=int)
     for i in range(start,fin):
@@ -60,13 +60,14 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
 
     pool = multiprocessing.Pool(workers)
 
-    argumentlist = argumentListMaker(N,workers)
 
     # The cluster index: c[i] = j indicates that i-th datum is in j-th cluster
     c = np.zeros(N, dtype=int)
     timing = [0,0]
     logging.info("Iteration\tVariation\tDelta Variation")
     total_variation = 0.0
+
+    argumentlist = argumentListMaker(N,workers,c,data,centroids)
     for j in range(nr_iter):
         logging.debug("=== Iteration %d ===" % (j+1))
 
@@ -74,13 +75,19 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
         # Assign data points to nearest centroid
         
                 
-        s = pool.map(assignment,argumentlist)
-        print(s)
+        s = pool.starmap(assignment,argumentlist)
         timing[0] += time.time() - start
+        total_variation = np.zeros(k,dtype=float)
+        cluster_sizes = np.zeros(k,dtype=int)
+        for i in range(len(s)):
+            for j in range(len(cluster_sizes)):
+                cluster_sizes[j] += s[i][0][j]
+            for j in range(len(total_variation)):
+                total_variation[j] += s[i][1][j]
         delta_variation = -total_variation
-        total_variation = sum(variation) 
+ #       total_variation = sum(variation) 
         delta_variation += total_variation
-        logging.info("%3d\t\t%f\t%f" % (j, total_variation, delta_variation))
+        #logging.info("%3d\t\t%f\t%f" % (j, total_variation, delta_variation))
 
 
         start = time.time()
@@ -110,7 +117,7 @@ def computeClustering(args):
     start_time = time.time()
     #
     # Modify kmeans code to use args.worker parallel threads
-    total_variation, assignment, timing = kmeans(args.k_clusters, X, nr_iter = args.iterations)
+    total_variation, assignment, timing = kmeans(args.k_clusters, X, nr_iter = args.iterations,workers=args.workers)
     #
     #
     end_time = time.time()
