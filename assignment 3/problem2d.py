@@ -16,8 +16,9 @@ from multiprocessing.sharedctypes import RawArray
 import myModule
 
 
-def initProcess(share):
-  myModule.c = share
+def initProcess(data,c):
+    myModule.data = data
+    myModule.c = c
 
 
 def generateData(n, c):
@@ -33,29 +34,23 @@ def nearestCentroid(datum, centroids):
     dist = np.linalg.norm(centroids - datum, axis=1)
     return np.argmin(dist), np.min(dist)
 
-
-def argumentListMaker(N,workers,data,centroids):
-    intervalsize = int(N / workers)
-    res = []
-    current = 0
-    while True:
-        tup = (current,current+intervalsize,len(centroids),data,centroids)
-        current += intervalsize
-        res.append(tup)
-        if current + intervalsize > N:
-            res[-1] = (res[-1][0],N,len(centroids),data,centroids)
-            break
-    return res
-
-def assignment(start,fin,k,data,centroids):
+def assignment(start,fin,k,centroids):
     variation = np.zeros(k)
-    cluster_sizes = np.zeros(k, dtype=int)
+    #cluster_sizes = np.zeros(k, dtype=int)
     for i in range(start,fin):
-        cluster, dist = nearestCentroid(data[i],centroids)
+        cluster, dist = nearestCentroid(myModule.data[i],centroids)
         myModule.c[i] = cluster
-        cluster_sizes[cluster] += 1
+        ##cluster_sizes[cluster] += 1
         variation[cluster] += dist**2
-    return cluster_sizes, variation
+    return variation
+
+def computeCentroids(s,f,k):
+    centroids = np.zeros((k,2))
+    for i in range(s,f):
+        centroids[myModule.c[i]] += myModule.data[i]   
+
+    return centroids
+
 
 def kmeans(k, data, nr_iter = 100, workers = 1):
     N = len(data)
@@ -69,7 +64,7 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
     #cc = RawArray(ctypes.c_int,N)
     #c = np.frombuffer(cc,dtype=int)    
     c = multiprocessing.Array('i',N)
-    pool = multiprocessing.Pool(initializer=initProcess,initargs=(c,),processes=workers)
+    pool = multiprocessing.Pool(initializer=initProcess,initargs=(data,c,),processes=workers)
 
 
     # The cluster index: c[i] = j indicates that i-th datum is in j-th cluster
@@ -78,41 +73,46 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
     logging.info("Iteration\tVariation\tDelta Variation")
     total_variation = 0.0
 
-    argumentlist = argumentListMaker(N,workers,data,centroids)
+    #argumentlist = argumentListMaker(N,workers,data,centroids)
     for j in range(nr_iter):
+        
         logging.debug("=== Iteration %d ===" % (j+1))
 
         start = time.time()
         # Assign data points to nearest centroid
-        print(c[:])
-        s = pool.starmap(assignment,argumentlist)
-        print(c[:])
+        #print(c[:])
+        s = pool.starmap(assignment,[(i*(N//workers),(i+1)*(N//workers),k,centroids) for i in range(workers)])
+        #print(c[:])
         
         timing[0] += time.time() - start
         total_variation = np.zeros(k,dtype=float)
         cluster_sizes = np.zeros(k,dtype=int)
-        for i in range(len(s)):
-            for j in range(len(cluster_sizes)):
-                cluster_sizes[j] += s[i][0][j]
-                #print(s[i][0][j])
-            for j in range(len(total_variation)):
-                total_variation[j] += s[i][1][j]
-                #print(s[i][1][j])
-        delta_variation = -total_variation
+        for i in range(len(c)):
+                cluster_sizes[c[i]] += 1
+        print(j,"\t",cluster_sizes)
+        #delta_variation = -total_variation
  #       total_variation = sum(variation) 
-        delta_variation += total_variation
+        #delta_variation += total_variation
         #logging.info("%3d\t\t%f\t%f" % (j, total_variation, delta_variation))
         #print(delta_variation, total_variation)
 
         start = time.time()
         # Recompute centroids
         centroids = np.zeros((k,2)) # This fixes the dimension to 2
-        for i in range(N):
-            centroids[c[i]] += data[i]        
+
+        #for i in range(N):
+        #    centroids[c[i]] += data[i]        
+        s = pool.starmap(computeCentroids,[(i*(N//workers),(i+1)*(N//workers),k) for i in range(workers)])
+       
+
+        for i in range(len(s)):
+            centroids += s[i]
+       
         timing[1] += time.time() - start
+        
         centroids = centroids / cluster_sizes.reshape(-1,1)
         logging.debug(cluster_sizes)
-        logging.debug(c)
+        logging.debug(c[:])
         logging.debug(centroids)
   
     return total_variation, c, timing
