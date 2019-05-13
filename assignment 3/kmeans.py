@@ -64,13 +64,13 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
 
     # The cluster index: c[i] = j indicates that i-th datum is in j-th cluster
     #c = np.zeros(N, dtype=int)
-    c = RawArray(ctypes.c_ulonglong,N)
-    cc = np.frombuffer(c,dtype=int)    
+    cc = RawArray(ctypes.c_int,N)
+    c = np.frombuffer(cc,dtype=int)    
     timing = [0,0]
     logging.info("Iteration\tVariation\tDelta Variation")
     total_variation = 0.0
 
-    argumentlist = argumentListMaker(N,workers,cc,data,centroids)
+    argumentlist = argumentListMaker(N,workers,c,data,centroids)
     for j in range(nr_iter):
         logging.debug("=== Iteration %d ===" % (j+1))
 
@@ -92,7 +92,7 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
  #       total_variation = sum(variation) 
         delta_variation += total_variation
         #logging.info("%3d\t\t%f\t%f" % (j, total_variation, delta_variation))
-
+        print(delta_variation, total_variation)
 
         start = time.time()
         # Recompute centroids
