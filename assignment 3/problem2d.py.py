@@ -13,6 +13,13 @@ import time
 import multiprocessing
 import ctypes
 from multiprocessing.sharedctypes import RawArray
+import myModule
+
+
+def initProcess(share):
+  myModule.c = share
+
+
 def generateData(n, c):
     logging.info(f"Generating {n} samples in {c} classes")
     X, y = make_blobs(n_samples=n, centers = c, cluster_std=1.7, shuffle=False,
@@ -27,25 +34,25 @@ def nearestCentroid(datum, centroids):
     return np.argmin(dist), np.min(dist)
 
 
-def argumentListMaker(N,workers,c,data,centroids):
+def argumentListMaker(N,workers,data,centroids):
     intervalsize = int(N / workers)
     res = []
     current = 0
     while True:
-        tup = (current,current+intervalsize,len(centroids),c,data,centroids)
+        tup = (current,current+intervalsize,len(centroids),data,centroids)
         current += intervalsize
         res.append(tup)
         if current + intervalsize > N:
-            res[-1] = (res[-1][0],N,len(centroids),c,data,centroids)
+            res[-1] = (res[-1][0],N,len(centroids),data,centroids)
             break
     return res
 
-def assignment(start,fin,k,c,data,centroids):
+def assignment(start,fin,k,data,centroids):
     variation = np.zeros(k)
     cluster_sizes = np.zeros(k, dtype=int)
     for i in range(start,fin):
         cluster, dist = nearestCentroid(data[i],centroids)
-        c[i] = cluster
+        myModule.c[i] = cluster
         cluster_sizes[cluster] += 1
         variation[cluster] += dist**2
     return cluster_sizes, variation
@@ -58,41 +65,44 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
     logging.debug("Initial centroids\n", centroids)
 
     N = len(data)
-
-    pool = multiprocessing.Pool(workers)
+    #print(N)
+    #cc = RawArray(ctypes.c_int,N)
+    #c = np.frombuffer(cc,dtype=int)    
+    c = multiprocessing.Array('i',N)
+    pool = multiprocessing.Pool(initializer=initProcess,initargs=(c,),processes=workers)
 
 
     # The cluster index: c[i] = j indicates that i-th datum is in j-th cluster
     #c = np.zeros(N, dtype=int)
-    cc = RawArray(ctypes.c_int,N)
-    c = np.frombuffer(cc,dtype=int)    
     timing = [0,0]
     logging.info("Iteration\tVariation\tDelta Variation")
     total_variation = 0.0
 
-    argumentlist = argumentListMaker(N,workers,c,data,centroids)
+    argumentlist = argumentListMaker(N,workers,data,centroids)
     for j in range(nr_iter):
         logging.debug("=== Iteration %d ===" % (j+1))
 
         start = time.time()
         # Assign data points to nearest centroid
-        
-        print(c)   
+        print(c[:])
         s = pool.starmap(assignment,argumentlist)
-        print(c)
+        print(c[:])
+        
         timing[0] += time.time() - start
         total_variation = np.zeros(k,dtype=float)
         cluster_sizes = np.zeros(k,dtype=int)
         for i in range(len(s)):
             for j in range(len(cluster_sizes)):
                 cluster_sizes[j] += s[i][0][j]
+                #print(s[i][0][j])
             for j in range(len(total_variation)):
                 total_variation[j] += s[i][1][j]
+                #print(s[i][1][j])
         delta_variation = -total_variation
  #       total_variation = sum(variation) 
         delta_variation += total_variation
         #logging.info("%3d\t\t%f\t%f" % (j, total_variation, delta_variation))
-        print(delta_variation, total_variation)
+        #print(delta_variation, total_variation)
 
         start = time.time()
         # Recompute centroids
@@ -151,11 +161,11 @@ if __name__ == "__main__":
                         type = int,
                         help='Number of clusters')
     parser.add_argument('--iterations', '-i',
-                        default='100',
+                        default='10',
                         type = int,
                         help='Number of iterations in k-means')
     parser.add_argument('--samples', '-s',
-                        default='10000',
+                        default='1000',
                         type = int,
                         help='Number of samples to generate as input')
     parser.add_argument('--classes', '-c',
