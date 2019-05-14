@@ -14,7 +14,7 @@ def sample_pi(t):
     q = t[0]
     n = t[1]
     i = t[2]
-    random.seed(i)
+    random.seed(31415)
     while True:
         s = 0
         for i in range(n):
@@ -25,7 +25,7 @@ def sample_pi(t):
         q.put(s)
 
 def compute_pi(args):
-    n = 10000
+    n = 100000
     p = multiprocessing.Pool(args.workers)
     q = multiprocessing.Manager().Queue()
     start = time.time()
@@ -45,7 +45,7 @@ def compute_pi(args):
             print("error: ", abs(pi_est-pi))
     end = time.time()
     print(" Steps\tSuccess\tPi est.\tError")
-    print("%6d\t%7d\t%1.5f\t%1.5f" % (n_total, s_total, pi_est, pi-pi_est))
+    print("%6d\t%7d\t%1.7f\t%1.7f" % (n_total, s_total, pi_est, pi-pi_est))
     print("Total time: ",end-start)
 
 
@@ -76,7 +76,8 @@ if __name__ == "__main__":
     speedup = [1.0]
     for i in range(1,len(results)):
         speedup.append(results[0]/results[i])
-    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo')
-    plt.plot([1,2,4,8,16,32],speedup,'ro')
+    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], label="Theoretical speedup")
+    plt.plot([1,2,4,8,16,32],speedup,label="Measured speedup")
     #plt.show()
-    plt.savefig("piplot.png")
+    plt.legend(loc="best")
+    plt.savefig("piplotb.png")
