@@ -56,7 +56,7 @@ if __name__ == "__main__":
     speedup = [1.0]
     for i in range(1,len(results)):
         speedup.append(results[0]/results[i])
-    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo',label="Theoretical speedup")
-    plt.plot([1,2,4,8,16,32],speedup,'ro',label="Measured speedup")
-    plt.legend(bbox_to_anchor=(1.05,1),loc=2,borderaxespad=0.)
+    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32],label="Theoretical speedup")
+    plt.plot([1,2,4,8,16,32],speedup,label="Measured speedup")
+    plt.legend(loc="best")
     plt.savefig("piplota.png")
