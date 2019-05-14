@@ -93,7 +93,6 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
         cluster_sizes = np.zeros(k,dtype=int)
         for i in range(len(c)):
                 cluster_sizes[c[i]] += 1
-        print(j,"\t",cluster_sizes)
         #delta_variation = -total_variation
  #       total_variation = sum(variation) 
         #delta_variation += total_variation
@@ -135,8 +134,11 @@ def computeClustering(args):
     X = generateData(args.samples, args.classes)
     plt.plot([1,4,8,16,32],[1,4,8,16,32], 'bo')
     start_time = time.time()
-    total_variation, assignment, timing = kmeans(3, X, 1, 1)
+    total_variation, assignment, timing = kmeans(args.k_clusters, X, args.iterations, 1)
     end_time = time.time()
+    print("Nr of cores: 1")
+    print("Timing: " + str(timing))
+    print("Time: " + str(end_time - start_time))
     ogTime = (end_time - start_time)
     plt.plot(1,1, 'ro')
     #start_time = time.time()
@@ -145,6 +147,9 @@ def computeClustering(args):
         total_variation, assignment, timing = kmeans(args.k_clusters, X, args.iterations, i)
         end_time = time.time()
         #print(timing)
+        print("Nr of cores: ",i)
+        print("Timing: " + str(timing))
+        print("Time: " + str(end_time - start_time))
         speedUp = ogTime / (end_time - start_time)
         plt.plot(i,speedUp, 'ro')
     plt.axis([0, 33, 0, 33])
