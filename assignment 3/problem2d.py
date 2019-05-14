@@ -60,7 +60,7 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
     N = len(data)
 
     # Choose k random data points as centroids
-    centroids = data[np.random.choice(np.array(range(N)),size=k,replace=False)]
+    centroids = [data[0],data[44],data[4]]#data[np.random.choice(np.array(range(N)),size=k,replace=False)]
     logging.debug("Initial centroids\n", centroids)
 
     N = len(data)
@@ -131,13 +131,25 @@ def computeClustering(args):
     
     X = generateData(args.samples, args.classes)
 
+    
+    X = generateData(args.samples, args.classes)
+    plt.plot([1,4,8],[1,4,8], 'bo')
     start_time = time.time()
-    #
-    # Modify kmeans code to use args.worker parallel threads
-    total_variation, assignment, timing = kmeans(args.k_clusters, X, nr_iter = args.iterations,workers=args.workers)
-    #
-    #
+    total_variation, assignment, timing = kmeans(3, X, 1, 1)
     end_time = time.time()
+    ogTime = (end_time - start_time)
+    plt.plot(1,1, 'ro')
+    #start_time = time.time()
+    for i in [4,8]:
+        start_time = time.time()
+        total_variation, assignment, timing = kmeans(3, X, 1, i)
+        end_time = time.time()
+        #print(timing)
+        speedUp = ogTime / (end_time - start_time)
+        plt.plot(i,speedUp, 'ro')
+    plt.axis([0, 10, 0, 10])
+    plt.show()
+    #total_variation, assignment, timing = kmeans(args.k_clusters, X, nr_iter = args.iterations,workers=args.workers)
     logging.info("Clustering complete in %3.2f [s]" % (end_time - start_time))
     print(f"Total variation {total_variation}")
     print("Overall time assignment: " + str(timing[0]) + " Avg time: " + str(timing[0]/args.iterations))
