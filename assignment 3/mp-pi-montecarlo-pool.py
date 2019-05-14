@@ -3,6 +3,7 @@ import multiprocessing # See https://docs.python.org/3/library/multiprocessing.h
 import argparse # See https://docs.python.org/3/library/argparse.html
 import random
 import time
+import matplotlib.pyplot as plt
 from math import pi
 
 def sample_pi(n):
@@ -52,8 +53,11 @@ if __name__ == "__main__":
         compute_pi(args)
         end = time.time()
         results.append(end-start)
-    speedup = []
+    speedup = [1.0]
     for i in range(1,len(results)):
-        speedup.append((round((results[0]/results[i]),1)) )
+        speedup.append(results[0]/results[i])
     print(results)
     print(speedup)
+    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo')
+    plt.plot([1,2,4,8,16,32],speedup,'ro')
+    plt.savefig("piplot.png")
