@@ -78,5 +78,5 @@ if __name__ == "__main__":
         speedup.append(results[0]/results[i])
     plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo')
     plt.plot([1,2,4,8,16,32],speedup,'ro')
-    plt.show()
+    #plt.show()
     plt.savefig("piplot.png")
