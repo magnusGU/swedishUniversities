@@ -58,4 +58,5 @@ if __name__ == "__main__":
         speedup.append(results[0]/results[i])
     plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo',label="Theoretical speedup")
     plt.plot([1,2,4,8,16,32],speedup,'ro',label="Measured speedup")
+    plt.legend(bbox_to_anchor=(1.05,1),loc=2,borderaxespad=0.)
     plt.savefig("piplota.png")
