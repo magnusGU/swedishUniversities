@@ -65,19 +65,8 @@ if __name__ == "__main__":
     parser.add_argument('--verbose','-v',
                         action='store_true')
     args = parser.parse_args()
-    #compute_pi(args)
-    results = []
-    for i in range(6):
-        args.workers = 2**i
-        start = time.time()
-        compute_pi(args)
-        end = time.time()
-        results.append(end-start)
-    speedup = [1.0]
-    for i in range(1,len(results)):
-        speedup.append(results[0]/results[i])
-    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], label="Theoretical speedup")
-    plt.plot([1,2,4,8,16,32],speedup,label="Measured speedup")
-    #plt.show()
-    plt.legend(loc="best")
-    plt.savefig("piplotb.png")
+    start = time.time()
+    compute_pi(args)
+    end = time.time()
+    print("Time: ",end-start)
+
