@@ -54,7 +54,7 @@ def kmeans(k, data, nr_iter = 100, workers = 1):
     N = len(data)
 
     # Choose k random data points as centroids
-    centroids = [data[0],data[44],data[4]]#data[np.random.choice(np.array(range(N)),size=k,replace=False)]
+    centroids = [data[0],data[44],data[4]]
     logging.debug("Initial centroids\n", centroids)
 
     N = len(data) 
@@ -116,26 +116,25 @@ def computeClustering(args):
     start_time = time.time()
     total_variation, assignment, timing = kmeans(args.k_clusters, X, args.iterations, 1)
     end_time = time.time()
-    print("Nr of cores: 1")
-    print("Timing: " + str(timing))
-    print("Time: " + str(end_time - start_time))
+    if args.verbose:
+        print("Nr of cores: 1")
+        print("Timing: " + str(timing))
+        print("Time: " + str(end_time - start_time))
     ogTime = (end_time - start_time)
     plt.plot(1,1, 'ro')
-    #start_time = time.time()
     for i in [4,8,16,32]:
         start_time = time.time()
         total_variation, assignment, timing = kmeans(args.k_clusters, X, args.iterations, i)
         end_time = time.time()
-        #print(timing)
-        print("Nr of cores: ",i)
-        print("Timing: " + str(timing))
-        print("Time: " + str(end_time - start_time))
+        if args.verbose:
+            print("Nr of cores: ",i)
+            print("Timing: " + str(timing))
+            print("Time: " + str(end_time - start_time))
         speedUp = ogTime / (end_time - start_time)
         plt.plot(i,speedUp, 'ro')
     plt.axis([0, 33, 0, 33])
     plt.show()
     plt.savefig("nplot.png")
-   # total_variation, assignment, timing = kmeans(args.k_clusters, X, nr_iter = args.iterations,workers=args.workers)
     logging.info("Clustering complete in %3.2f [s]" % (end_time - start_time))
     print(f"Total variation {total_variation}")
     print("Overall time assignment: " + str(timing[0]) + " Avg time: " + str(timing[0]/args.iterations))
@@ -145,7 +144,6 @@ def computeClustering(args):
         fig, axes = plt.subplots(nrows=1, ncols=1)
         axes.scatter(X[:, 0], X[:, 1], c=assignment, alpha=0.2)
         plt.title("k-means result")
-        #plt.show()        
         fig.savefig(args.plot)
         plt.close(fig)
 
