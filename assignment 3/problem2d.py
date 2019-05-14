@@ -13,18 +13,22 @@ import time
 import multiprocessing
 import ctypes
 from multiprocessing.sharedctypes import RawArray
-import myModule
+import time
 
+
+var_dict = {}
 
 def initProcess(data,c):
-    myModule.data = data
-    myModule.c = c
+    #time.data = data
+    #var_dict['c'] = c
+    var_dict['data'] = data
+    var_dict['c'] = c
 
 
 def generateData(n, c):
     logging.info(f"Generating {n} samples in {c} classes")
     X, y = make_blobs(n_samples=n, centers = c, cluster_std=1.7, shuffle=False,
-                      random_state = 2122)
+                      random_state = 212)
     return X
 
 
@@ -38,8 +42,8 @@ def assignment(start,fin,k,centroids):
     variation = np.zeros(k)
     #cluster_sizes = np.zeros(k, dtype=int)
     for i in range(start,fin):
-        cluster, dist = nearestCentroid(myModule.data[i],centroids)
-        myModule.c[i] = cluster
+        cluster, dist = nearestCentroid(var_dict['data'][i],centroids)
+        var_dict['c'][i] = cluster
         ##cluster_sizes[cluster] += 1
         variation[cluster] += dist**2
     return variation
@@ -47,7 +51,7 @@ def assignment(start,fin,k,centroids):
 def computeCentroids(s,f,k):
     centroids = np.zeros((k,2))
     for i in range(s,f):
-        centroids[myModule.c[i]] += myModule.data[i]   
+        centroids[var_dict['c'][i]] += var_dict['data'][i]   
 
     return centroids
 
