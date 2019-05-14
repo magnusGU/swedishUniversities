@@ -14,7 +14,7 @@ def sample_pi(t):
     q = t[0]
     n = t[1]
     i = t[2]
-    random.seed(i)
+    random.seed()
     while True:
         s = 0
         for i in range(n):
