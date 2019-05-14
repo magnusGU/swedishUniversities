@@ -14,7 +14,7 @@ def sample_pi(t):
     q = t[0]
     n = t[1]
     i = t[2]
-    random.seed()
+    random.seed(i)
     while True:
         s = 0
         for i in range(n):
@@ -25,7 +25,7 @@ def sample_pi(t):
         q.put(s)
 
 def compute_pi(args):
-    n = 100000
+    n = 10000
     p = multiprocessing.Pool(args.workers)
     q = multiprocessing.Manager().Queue()
     start = time.time()
