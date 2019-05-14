@@ -56,8 +56,6 @@ if __name__ == "__main__":
     speedup = [1.0]
     for i in range(1,len(results)):
         speedup.append(results[0]/results[i])
-    print(results)
-    print(speedup)
-    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo')
-    plt.plot([1,2,4,8,16,32],speedup,'ro')
-    plt.savefig("piplot.png")
+    plt.plot([1,2,4,8,16,32],[1,2,4,8,16,32], 'bo',label="Theoretical speedup")
+    plt.plot([1,2,4,8,16,32],speedup,'ro',label="Measured speedup")
+    plt.savefig("piplota.png")
