@@ -34,12 +34,19 @@ class MRWordFrequencyCount(MRJob):
             d[thres] += 1
         
         yield ("dict", (d,l[0],l[-1]))
-        yield ("count", i)
-        yield ("total",total)
+        yield ("total_count",(total,i))
         yield ("min", l[0])
         yield ("max", l[-1])
         
     def reducer(self, key, values):
+        if key == "total_count":
+            total = 0
+            count = 0
+            for _,tup in enumerate(values):
+                total += tup[0]
+                count += tup[1]
+            avg = total / count
+            yield ("avg", avg)
         if key == 'dict':
             d = []
             l = []
