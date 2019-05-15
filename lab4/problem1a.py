@@ -1,4 +1,5 @@
 from mrjob.job import MRJob
+from collections import defaultdict
 
 
 class MRWordFrequencyCount(MRJob):
@@ -10,27 +11,30 @@ class MRWordFrequencyCount(MRJob):
         yield "value", float(value)
 
 
-    def reducer(self, key, values):
+    def combiner(self, key, values):
         total = 0
         l = []
         for i, v in enumerate(values):
             l.append(v)
             total += v
         l.sort()
-        avg = total / i
-        median = 0
-        length = len(l)
-        if length % 2 == 0:
-            median = (l[length//2] + l[length//2 - 1]) / 2
-        else:
-            median = l[length // 2]
-        yield ("avg",avg)
+        interval = (l[-1] - l[0]) / 10
+        thres = l[0] + interval
+        d = defaultdict(float)
+		#
+        for e in l:
+            if e > thres:
+                thres += interval
+            d[thres] += 1
+        
+        yield ("dict", d)
+        yield ("count", i)
+        yield ("total",total)
         yield ("min", l[0])
         yield ("max", l[-1])
-        yield ("median", median)
         
-
-    
+    def reducer(self, key, values):
+        yield "dead", True
         
 
 
