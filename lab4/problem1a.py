@@ -1,5 +1,6 @@
 from mrjob.job import MRJob
 from collections import defaultdict
+import time
 
 
 class MRWordFrequencyCount(MRJob):
@@ -11,22 +12,25 @@ class MRWordFrequencyCount(MRJob):
     def combiner(self, key, values):
         total = 0
         total_2 = 0
-        l = []
+        min_val = 100
+        max_val = 0
         for i, v in enumerate(values):
-            l.append(v)
+            if(v > max_val):
+                max_val = v
+            if(v < min_val):
+                min_val = v
             total += v
             total_2 += v**2
-        l.sort()
-        interval = (l[-1] - l[0]) / 10
-        thres = l[0]
+        interval = (max_val - min_val) / 10
+        thres = min_val
         d = defaultdict(float)
-		#
-        for e in l:
+    
+        for _,e in enumerate(values):
             if e > thres + interval:
                 thres += interval
             d[thres] += 1
         
-        yield ("dict", (d,l[0],l[-1]))
+        yield ("dict", (d,min_val,max_val))
         yield ("total_count",(total,i+1,total_2))
         
     def reducer(self, key, values):
@@ -73,5 +77,8 @@ class MRWordFrequencyCount(MRJob):
 
 
 if __name__ == '__main__':
+    start = time.time()
     MRWordFrequencyCount.run()
+    end = time.time()
+    print("Time spent: ", end-start)
     
