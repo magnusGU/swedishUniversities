@@ -52,13 +52,15 @@ class MRWordFrequencyCount(MRJob):
             interval = (l[-1] - l[0]) / 10
             thres = l[0] #+ interval
             finalD = defaultdict(float)
+            #since these are not sorted, another approach is used
             for dic in d:
                 for key in dic:
-                    if float(key) > thres + interval:
-                        thres += interval
-                    finalD[thres] += dic[key]
+                    for i in range(10):
+                        if float(key) >= thres + interval*i and float(key) < thres + interval*(i+1):
+                            #thres += interval
+                            finalD[thres + interval*i] += dic[key]
             for key in finalD:
-                yield key, finalD[key]
+                yield round(key,3), finalD[key]
             yield 'min', l[0]
             yield 'max', l[-1]
 
