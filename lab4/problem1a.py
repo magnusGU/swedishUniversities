@@ -10,14 +10,15 @@ class MRWordFrequencyCount(MRJob):
 
     def combiner(self, key, values):
         total = 0
+        total_2 = 0
         l = []
-        #l, total, i = self.__looper__(values)
         for i, v in enumerate(values):
             l.append(v)
             total += v
+            total_2 += v**2
         l.sort()
         interval = (l[-1] - l[0]) / 10
-        thres = l[0]# + interval
+        thres = l[0]
         d = defaultdict(float)
 		#
         for e in l:
@@ -26,17 +27,24 @@ class MRWordFrequencyCount(MRJob):
             d[thres] += 1
         
         yield ("dict", (d,l[0],l[-1]))
-        yield ("total_count",(total,i))
+        yield ("total_count",(total,i+1,total_2))
         
     def reducer(self, key, values):
         if key == "total_count":
             total = 0
             count = 0
+            total_2 = 0
             for _,tup in enumerate(values):
                 total += tup[0]
                 count += tup[1]
+                total_2 += tup[2]
             avg = total / count
+            exp = total_2 / count
+            std = (exp - (avg**2))**(0.5)
             yield ("avg", avg)
+            yield ("std",std)
+            yield ("count",count)
+        
             
         if key == 'dict':
             d = []
