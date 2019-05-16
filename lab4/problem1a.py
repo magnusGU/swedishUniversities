@@ -21,6 +21,7 @@ class MRWordFrequencyCount(MRJob):
                 min_val = v
             total += v
             total_2 += v**2
+            yield('val',v)
         interval = (max_val - min_val) / 10
         thres = min_val
         d = defaultdict(float)
@@ -49,6 +50,23 @@ class MRWordFrequencyCount(MRJob):
             yield ("std",std)
             yield ("count",count)
         
+        if key == 'val':
+            l = []
+            for _,v in enumerate(values):
+                l.append(v)
+            l.sort()
+            
+            interval = (l[-1] - l[0]) / 10
+            thres = l[0] #+ interval
+            d = defaultdict(float)
+            #since these are not sorted, another approach is used
+            
+            for i in l:
+                if i >= thres + interval:
+                    thres += interval
+                d[thres] += 1
+            for key in d:
+                yield round(key,3), d[key]
             
         if key == 'dict':
             d = []
