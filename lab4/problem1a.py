@@ -67,6 +67,7 @@ class MRWordFrequencyCount(MRJob):
             thres = min_val
             d = defaultdict(float)
             #since these are not sorted, another approach is used
+            #maybe even worse than sorting, since sorting is O(n log n) and log(20000000) = 7.3 and the solution below O(5n) in even case, O(10n) in worst case
             for key in l:
                 for i in range(10):
                     if key >= thres + interval*i and key < thres + interval*(i+1):
