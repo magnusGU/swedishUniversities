@@ -10,13 +10,8 @@ class MRWordFreqCount(MRJob):
 
     def reducer(self, key, values):
         d = defaultdict(int)
-        interval = 1
-        thres = 0
         for _,v in enumerate(values):
-            for i in range(10):
-                if v >= thres + interval*i and v < thres + interval*(i+1):
-                    d[thres + interval*i] += 1
-                    break
+            d[int(v)] += 1
         
         for key in d:
             yield round(key,3), d[key]
