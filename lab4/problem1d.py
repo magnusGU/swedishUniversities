@@ -3,16 +3,16 @@ from collections import defaultdict
 import time
 
 
-class MRWordFrequencyCount(MRJob):
+class MRWordFreqCount(MRJob):
 
     def configure_args(self):
-        super(MRWordFrequencyCount, self).configure_args()
+        super(MRWordFreqCount, self).configure_args()
         self.add_passthru_arg('--group', default='1',help="Specify the output format of the job")
 
     def mapper(self, _, line):
         _id, group, value = line.split()
         if group == self.options.group:
-            yield "value", float(value) def combiner(self, key, values):
+            yield "value", float(value)
 
     def combiner(self, word, counts):
         interval = 4
