@@ -21,17 +21,9 @@ class MRWordFrequencyCount(MRJob):
                 min_val = v
             total += v
             total_2 += v**2
-            yield('val',v)
-        interval = (max_val - min_val) / 10
-        thres = min_val
-        d = defaultdict(float)
-    
-        for _,e in enumerate(values):
-            if e > thres + interval:
-                thres += interval
-            d[thres] += 1
+            #yield('val',v)
         
-        yield ("dict", (d,min_val,max_val))
+        yield ("val", (min_val,max_val))
         yield ("total_count",(total,i+1,total_2))
         
     def reducer(self, key, values):
@@ -49,57 +41,42 @@ class MRWordFrequencyCount(MRJob):
             yield ("avg", avg)
             yield ("std",std)
             yield ("count",count)
-        
+            
+            
         if key == 'val':
             min_val = 100
             max_val = 0
-            l = []
-            for _,v in enumerate(values):
-                l.append(v)
+            for i,v in enumerate(values):
                 if(v > max_val):
                     max_val = v
                 if(v < min_val):
                     min_val = v
 
-            #l.sort()
-            
-            interval = (max_val - min_val) / 10
-            thres = min_val
-            d = defaultdict(float)
-            #since these are not sorted, another approach is used
-            #maybe even worse than sorting, since sorting is O(n log n) and log(20000000) = 7.3 and the solution below O(5n) in even case, O(10n) in worst case
-            for key in l:
-                for i in range(10):
-                    if key >= thres + interval*i and key < thres + interval*(i+1):
-                        #thres += interval
-                        d[thres + interval*i] += 1
-            
-            for key in d:
-                yield round(key,3), d[key]
-            
-        if key == 'dict':
-            d = []
-            l = []
-            for i, v in enumerate(values):
-                d.append(v[0])
-                l.append(v[1])
-                l.append(v[-1])
-            l.sort()
-            
-            interval = (l[-1] - l[0]) / 10
-            thres = l[0] #+ interval
-            finalD = defaultdict(float)
-            #since these are not sorted, another approach is used
-            for dic in d:
-                for key in dic:
-                    for i in range(10):
-                        if float(key) >= thres + interval*i and float(key) < thres + interval*(i+1):
-                            #thres += interval
-                            finalD[thres + interval*i] += dic[key]
-            for key in finalD:
-                yield round(key,3), finalD[key]
-            yield 'min', l[0]
-            yield 'max', l[-1]
+            yield("min", min_val)
+            yield("max", max_val)
+        #if key == 'dict':
+        #    d = []
+        #    l = []
+        #    for i, v in enumerate(values):
+        #        d.append(v[0])
+        #        l.append(v[1])
+        #        l.append(v[-1])
+        #    l.sort()
+        #    
+        #    interval = (l[-1] - l[0]) / 10
+        #    thres = l[0] #+ interval
+        #    finalD = defaultdict(float)
+        #    #since these are not sorted, another approach is used
+        #    for dic in d:
+        #        for key in dic:
+        #            for i in range(10):
+        #                if float(key) >= thres + interval*i and float(key) < thres + interval*(i+1):
+        #                    #thres += interval
+        #                    finalD[thres + interval*i] += dic[key]
+        #    for key in finalD:
+        #        yield round(key,3), finalD[key]
+        #    yield 'min', l[0]
+        #    yield 'max', l[-1]
         
 
 
