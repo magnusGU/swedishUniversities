@@ -1,4 +1,5 @@
 from mrjob.job import MRJob
+from collections import defaultdict
 import tempfile
 tempfile.tempdir = '/data/tmp'
 
@@ -7,9 +8,15 @@ class MRWordFreqCount(MRJob):
         id,group,value = line.split()
         yield ("value",float(value))
     def combiner(self, word, counts):
+        interval = 4
+        min = 3.141593
         total = total_2 = max_val = 0
         min_val = 100
+        d = defaultdict(int)
+
         for i,v in enumerate(counts):
+            val = (v-min)/interval * 10
+            d[int(val)] += 1
             total += v
             total_2 += v**2
             if(v > max_val):
@@ -19,6 +26,8 @@ class MRWordFreqCount(MRJob):
         yield("min",min_val)
         yield("max",max_val)
         yield("total_count",(total,i+1,total_2))
+        for key in d:
+            yield (key, d[key])
 
     def reducer(self, key, values):
         if key == 'total_count':
@@ -37,6 +46,10 @@ class MRWordFreqCount(MRJob):
             yield(key,min(values))
         elif key == "max":
             yield(key,max(values))
+        else:
+            lower = 3.141593 + 0.4 * key
+            upper = 3.141593 + 0.4 * (key + 1)
+            yield((round(lower,3),round(upper,3)),sum(values))
 
 if __name__ == '__main__':
     MRWordFreqCount.run()
