@@ -26,6 +26,8 @@ class MRWordFreqCount(MRJob):
         yield("min",min_val)
         yield("max",max_val)
         yield("total_count",(total,i+1,total_2))
+        d[9] += d[10]
+        del d[10]
         for key in d:
             yield (key, d[key])
 
