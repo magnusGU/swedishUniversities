@@ -23,7 +23,8 @@ class MRWordFrequencyCount(MRJob):
             total_2 += v**2
             #yield('val',v)
         
-        yield ("val", (min_val,max_val))
+        yield ("min", min_val)
+        yield ("max", max_val)
         yield ("total_count",(total,i+1,total_2))
         
     def reducer(self, key, values):
@@ -43,17 +44,20 @@ class MRWordFrequencyCount(MRJob):
             yield ("count",count)
             
             
-        if key == 'val':
-            min_val = 100
-            max_val = 0
+        if key == 'min':
+            val = 100
             for i,v in enumerate(values):
-                if(v > max_val):
-                    max_val = v
-                if(v < min_val):
-                    min_val = v
+                if(v < val):
+                    val = v
 
-            yield("min", min_val)
-            yield("max", max_val)
+            yield("min", val)
+        if key == 'max':
+            val = 0
+            for i,v in enumerate(values):
+                if(v > val):
+                    val = v
+
+            yield("max", val)
         #if key == 'dict':
         #    d = []
         #    l = []
