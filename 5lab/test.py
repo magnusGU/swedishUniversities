@@ -2,7 +2,7 @@ import random
 from pyspark import SparkContext
 sc = SparkContext(master = 'local[4]')
 
-distFile = sc.textFile("test.txt")
+distFile = sc.textFile("datasnippet.txt")
 splitData = distFile.map(lambda l : l.split()).map(lambda t:float(t[2]))
 count = splitData.count()
 _sum = splitData.reduce(lambda a,b: a+b)
