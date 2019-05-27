@@ -17,9 +17,12 @@ _min = ordered[0]
 _max = ordered[count-1]
 
 interval = (_max - _min)
-histogram = splitData.map(lambda a: (int(((a-_min)/interval)*10),1)).reduceByKey(lambda a,b:a+b)
+nrOfBins = 10
+histogram = splitData.map(lambda a: (int(((a-_min)/interval)*nrOfBins),1)).reduceByKey(lambda a,b:a+b)
 
 hg = histogram.collect()
+hg[nrOfBins-1] += hg[nrOfBins]
+del hg[nrOfBins]
 avg = _sum / count
 std = (_expsum/count - avg**2)**(0.5)
 print("Count: ",count)
